@@ -10,6 +10,7 @@ import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 
 function Weather() {
   
+  
    const [query, setQuery] = useState('');
    const [weather, setWeather] = useState({});
 

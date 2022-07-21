@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import {useFormik} from 'formik';
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
@@ -27,41 +27,32 @@ function Copyright(props) {
       {'.'}
     </Typography>
   );
-}
+} 
 
 
-const theme = createTheme();
+
 
 export default function SignIn() {
-
-
-    const navigate = useNavigate()
-
+  
+const navigate = useNavigate()
+   
 const navTo = () => {
     navigate('/weather')
+    
 }
+  
+const formik = useFormik({
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  const formik = useFormik({
-
-    initialValues:{
+     initialValues:{
       email:"",
 
       password: "",
     },
 
-    validationSchema:Yup.object({
+ validationSchema:Yup.object({
 
-        email:Yup.string().email("Invalid email","^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$").required("Required"),
-     password: Yup.string().required('Password is required'),
+     email:Yup.string().email("Invalid email","^[a-z)A-Z0-9+_.-]+@[a-zA-Z0-9.-]+$").required("Required"),
+     password: Yup.string().min(4,"minimum length four").max(10,"max length ten").required('Password is required' ),
 
     }),
 
@@ -71,10 +62,10 @@ const navTo = () => {
     },
 })
 
-
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+
+    <form onSubmit={formik.handleSubmit} >
+    <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -90,7 +81,8 @@ const navTo = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box  sx={{ mt: 1 }}>
+           
             <TextField
               margin="normal"
               required
@@ -116,6 +108,7 @@ const navTo = () => {
               value={formik.values.password}
                 onChange={formik.handleChange}
             />
+             {formik.errors.password ? <p>invalid password</p> : null }
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -125,7 +118,7 @@ const navTo = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={navTo}
+     
             >
               Sign In
             </Button>
@@ -141,10 +134,13 @@ const navTo = () => {
                 </Link>
               </Grid>
             </Grid>
+           
+            
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
+ </form>
+    
   );
 }
