@@ -1,14 +1,9 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
@@ -16,21 +11,7 @@ import {useFormik} from 'formik';
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-} 
-
-
-
+ 
 
 export default function SignIn() {
   
@@ -52,7 +33,7 @@ const formik = useFormik({
  validationSchema:Yup.object({
 
      email:Yup.string().email("Invalid email","^[a-z)A-Z0-9+_.-]+@[a-zA-Z0-9.-]+$").required("Required"),
-     password: Yup.string().min(4,"minimum length four").max(10,"max length ten").required('Password is required' ),
+     password: Yup.string().required('Password is required' ).min(4),
 
     }),
 
@@ -64,24 +45,30 @@ const formik = useFormik({
 
   return (
 
-    <form onSubmit={formik.handleSubmit} >
-    <Container component="main" maxWidth="xs">
+   <div style={{
+     width:'100%',
+     height:'100vh',
+     backgroundImage: "linear-gradient(to bottom right,#a6a5fa,#e6e6f5)",
+   }}>
+     <form onSubmit={formik.handleSubmit} >
+    <Container component="main" maxWidth="xs" sx={{
+      
+    }}>
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
+            paddingTop:'35%',
+
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+         
+          <Typography component="h1" variant="h5" sx={{
+            textAlign:'center'
+          }}>
+            SignIn
           </Typography>
-          <Box  sx={{ mt: 1 }}>
+          <Box  >
            
             <TextField
               margin="normal"
@@ -95,7 +82,12 @@ const formik = useFormik({
               onChange={formik.handleChange}
               autoFocus
             />
-            {formik.errors.email ? <p>invalid email</p> : null }
+            {formik.errors.email ? <p style={{
+              color:'red',
+              margin:'0',
+              padding:'0'
+             }}>invalid email</p> : null }
+             
             <TextField
               margin="normal"
               required
@@ -108,39 +100,28 @@ const formik = useFormik({
               value={formik.values.password}
                 onChange={formik.handleChange}
             />
-             {formik.errors.password ? <p>invalid password</p> : null }
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+             {formik.errors.password ? <p style={{
+              color:'red',
+              margin:'0',
+              padding:'0'
+             }}>Password Required</p> : null }
+            
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-     
+              
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-           
             
-          </Box>
+         </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+     
       </Container>
  </form>
+   </div>
     
   );
 }

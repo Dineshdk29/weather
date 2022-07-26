@@ -1,15 +1,39 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Stack, TextField } from '@mui/material';
+import { Button, Stack, TextField, ThemeProvider } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
+import { oneAction, twoAction ,thirdAction} from './store/Redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createTheme } from '@mui/material'
 
 function Weather() {
-  
+
+  const things = useSelector(state => state)
+  const dispatch = useDispatch()
+
+  const theme = createTheme({
+    palette:{
+        appbar:{
+            main:'Transparent'
+        },
+        buttonColor:{
+            main:'white'
+        }
+    }
+})
+
+  const navigate = useNavigate()
+
+  const click = () => {
+      navigate('/')
+  }
+
+
   
    const [query, setQuery] = useState('');
    const [weather, setWeather] = useState({});
@@ -39,21 +63,48 @@ function Weather() {
     return `${day} ${date} ${month} ${year}`
   }
  return (
-     <center>
+  
+     <ThemeProvider theme={theme}>
+      <div style={{
+    backgroundImage: "linear-gradient(to bottom right,#5076d4, #0e338f)",
+    height:'100vh'
+  }}>
+      <center>
 
-<Box sx={{ flexGrow: 1}}>
-      <AppBar position="static" color='secondary' >
-        <Toolbar variant="dense">
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 6 }}>
-            <ThunderstormIcon/>
+<Box sx={{ flexGrow: 1}} >
+<AppBar position="sticky" color='appbar' elevation={0} sx={{
+            backdropFilter:'blur(50px)',
+            
+        }} >
+        <Toolbar >
+        <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+          
           </IconButton>
-          <Typography variant="h6" color="white" component="div" sx={{ mr: 2 }}>
-            Weather app
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            
           </Typography>
+          
+        <Button
+        onClick={click}
+            variant='contained'
+            color='buttonColor'
+            sx={{
+              textTransform:'capitalize',
+              color:'blue',
+            }}
+            >
+            SignOut
+            </Button>
         </Toolbar>
       </AppBar>
     </Box>
-    <Grid mt={15} className={
+    <Grid mt={4} className={
       (typeof weather.main == "undefined")
        ?  'app' : ((weather.main.temp ))}
        >
@@ -70,7 +121,7 @@ function Weather() {
             value={query}
             onKeyPress={search}
             sx={{
-              width:'30%'
+              width:'100%'
             }}
           />
         
@@ -91,9 +142,32 @@ function Weather() {
 
         </Grid>
         ) }
+           <h1>{things}</h1>
+           <Button
+          variant='contained'
+           onClick={()=> dispatch(oneAction())}
+           >
+            Chill
+           </Button>
+          
+           <Button
+           variant='contained'
+           onClick={()=> dispatch(twoAction())}
+           >
+            Hot
+           </Button>
+          
+           <Button
+           variant='contained'
+           onClick={()=> dispatch(thirdAction())}
+           >
+            Rainy
+           </Button>
        </Stack>
     </Grid>
     </center>
+    </div>
+     </ThemeProvider>
   );
 }
 export default Weather;
